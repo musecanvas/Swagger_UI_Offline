@@ -22,5 +22,5 @@ socketserver.TCPServer.allow_reuse_address = True
 
 with socketserver.TCPServer(("0.0.0.0", PORT), MyHTTPRequestHandler) as httpd:
     print(f"API Documentation server running at http://0.0.0.0:{PORT}/")
-    print(f"Open your browser and navigate to the webview to see the documentation")
+    print("Open your browser and navigate to the webview to see the documentation")
     httpd.serve_forever()
