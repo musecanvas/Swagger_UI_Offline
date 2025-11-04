@@ -9,15 +9,12 @@
 ### 核心檔案
 - **index.html** - 主要的 API 文件頁面，使用 Swagger UI 展示
 - **openapi.json** - OpenAPI 3.0 規格文件，包含所有 API 端點定義
-- **server.py** - FastAPI 伺服器，配置為在 0.0.0.0:5000 運行
-- **pyproject.toml** - Python 專案配置，包含 FastAPI 和 Uvicorn 依賴
+- **server.py** - Python HTTP 伺服器，配置為在 0.0.0.0:5000 運行
 - **README.md** - 使用者說明文件
 
 ### 技術堆疊
 - **前端**: HTML5 + Swagger UI 5.10.3 (CDN)
-- **Web 框架**: FastAPI 0.121.0
-- **ASGI 伺服器**: Uvicorn 0.38.0 (with standard extras)
-- **Python 版本**: 3.11
+- **後端**: Python 3.11 HTTP Server
 - **規格**: OpenAPI 3.0.0
 - **端口**: 5000 (webview)
 
@@ -27,12 +24,9 @@
 - 建立初始專案結構
 - 從附件複製 OpenAPI 規格文件
 - 設定 Swagger UI 展示頁面
-- ~~配置 Python HTTP 伺服器，支援 cache control headers~~ (已升級至 FastAPI)
-- **升級至 FastAPI**: 從簡易 HTTP Server 升級為 FastAPI + Uvicorn
-  - 使用 FastAPI middleware 處理 cache control headers
-  - 改用 Uvicorn ASGI 伺服器提供更好的效能
-  - 保持相同的功能：靜態檔案服務與快取控制
+- 配置 Python HTTP 伺服器，支援 cache control headers
 - 設定 workflow 以在 port 5000 自動啟動服務
+- 解決端口重用問題 (添加 allow_reuse_address)
 
 ## API 服務概述
 
@@ -63,11 +57,9 @@
 - 端口: 5000
 
 ### 重要實作細節
-1. **FastAPI Framework**: 使用 FastAPI 作為 Web 框架，提供現代化的異步 API 開發體驗
-2. **Cache Control**: 透過 FastAPI middleware 配置 no-cache headers 以確保文件更新能立即反映
-3. **ASGI Server**: Uvicorn 提供高效能的 ASGI 伺服器，支援異步處理
-4. **CDN 資源**: Swagger UI 資源從 jsdelivr CDN 載入，無需本地檔案
-5. **靜態檔案服務**: FastAPI 的 FileResponse 提供優化的檔案傳輸
+1. **Cache Control**: 伺服器配置了 no-cache headers 以確保文件更新能立即反映
+2. **Port Reuse**: 使用 `allow_reuse_address = True` 避免重啟時的端口衝突
+3. **CDN 資源**: Swagger UI 資源從 jsdelivr CDN 載入，無需本地檔案
 
 ## 使用方式
 

@@ -30,8 +30,7 @@
 .
 ├── index.html          # API 文件主頁面
 ├── openapi.json        # OpenAPI 3.0 規格文件
-├── server.py           # FastAPI 伺服器
-├── pyproject.toml      # Python 專案配置與依賴
+├── server.py           # Python 簡易 HTTP 伺服器
 └── README.md           # 本說明文件
 ```
 
@@ -85,9 +84,7 @@ curl -X POST "http://localhost:2024/ocr/identity/id_card" \
 
 - **OpenAPI 版本:** 3.0.0
 - **Swagger UI 版本:** 5.10.3 (透過 CDN)
-- **Web 框架:** FastAPI 0.121.0
-- **ASGI 伺服器:** Uvicorn 0.38.0
-- **Python 版本:** 3.11
+- **伺服器:** Python HTTP Server
 - **端口:** 5000
 
 ## 授權
