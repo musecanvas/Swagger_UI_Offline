@@ -11,8 +11,7 @@
 ### 核心檔案
 - **index.html** - 主要的 API 文件頁面，使用 Swagger UI 展示
 - **openapi.json** - OpenAPI 3.0 規格文件，包含所有 API 端點定義
-- **server.py** - FastAPI 伺服器，配置為在 0.0.0.0:5000 運行
-- **pyproject.toml** - Python 專案配置，包含 FastAPI 和 Uvicorn 依賴
+- **server.py** - Python 簡易 HTTP 伺服器，配置為在 0.0.0.0:5000 運行
 - **swagger-ui/** - Swagger UI 本地靜態資源 (1.8MB)
   - swagger-ui.css
   - swagger-ui-bundle.js
@@ -22,9 +21,7 @@
 
 ### 技術堆疊
 - **前端**: HTML5 + Swagger UI 5.10.3 (本地離線版)
-- **Web 框架**: FastAPI 0.121.0
-- **ASGI 伺服器**: Uvicorn 0.38.0 (with standard extras)
-- **Python 版本**: 3.11
+- **後端**: Python 3.11 SimpleHTTPRequestHandler
 - **規格**: OpenAPI 3.0.0
 - **端口**: 5000 (webview)
 - **離線使用**: ✅ 完全支援
@@ -35,10 +32,8 @@
 - 建立初始專案結構
 - 從附件複製 OpenAPI 規格文件 (1,436 行)
 - 設定 Swagger UI 展示頁面
-- **升級至 FastAPI**: 從簡易 HTTP Server 升級為 FastAPI + Uvicorn
-  - 使用 FastAPI middleware 處理 cache control headers
-  - 改用 Uvicorn ASGI 伺服器提供更好的效能
-  - 配置靜態檔案服務
+- 配置 Python HTTP 伺服器，支援 cache control headers
+- 設定端口重用 (allow_reuse_address = True)
 - **本地化 Swagger UI 資源**: 下載所有 Swagger UI 資源至本地
   - 從 jsdelivr CDN 下載 swagger-ui.css (149KB)
   - 從 jsdelivr CDN 下載 swagger-ui-bundle.js (1.4MB)
@@ -46,9 +41,9 @@
   - 從 jsdelivr CDN 下載 favicon-32x32.png
   - 總大小：1.8MB
   - 更新 index.html 使用本地路徑
-  - 使用 FastAPI StaticFiles 掛載靜態資源
   - **現在支援完全離線使用**
 - 設定 workflow 以在 port 5000 自動啟動服務
+- ~~曾短暫升級至 FastAPI~~ (已還原為簡易 HTTP Server)
 
 ## API 服務概述
 
@@ -79,11 +74,11 @@
 - 端口: 5000
 
 ### 重要實作細節
-1. **FastAPI Framework**: 使用 FastAPI 作為 Web 框架，提供現代化的異步 API 開發體驗
-2. **Cache Control**: 透過 FastAPI middleware 配置 no-cache headers 以確保文件更新能立即反映
-3. **ASGI Server**: Uvicorn 提供高效能的 ASGI 伺服器，支援異步處理
+1. **Simple HTTP Server**: 使用 Python 內建的 http.server.SimpleHTTPRequestHandler
+2. **Cache Control**: 自訂 HTTPRequestHandler，覆寫 end_headers() 方法加入 no-cache headers
+3. **Port Reuse**: 設定 `allow_reuse_address = True` 避免重啟時的端口衝突
 4. **本地靜態資源**: 所有 Swagger UI 資源已下載至 swagger-ui/ 目錄
-5. **靜態檔案服務**: FastAPI 的 StaticFiles 和 FileResponse 提供優化的檔案傳輸
+5. **靜態檔案服務**: SimpleHTTPRequestHandler 自動服務當前目錄的所有檔案
 6. **離線運作**: 無需任何 CDN 連線，完全自給自足
 
 ## 使用方式
