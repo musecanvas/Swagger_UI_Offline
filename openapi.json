@@ -2,13 +2,17 @@
   "openapi": "3.0.0",
   "info": {
     "title": "入廠證件辨識服務API 文件 - OCR Recognition",
-    "description": "\n\n## 此服務提供多種文件類型的光學字元辨識 (OCR) 功能。\n\n### **API 文件列表：**\n* 中華民國身分證\n* 全民健康保險卡\n* 中華民國居留證\n* 外勞護照 (越南)\n* 汽車行照\n* 柴油車排煙檢測表\n* 自主管理標章\n* 勞工職業災害保險及保護法第10條規定 (特別加保)\n* 勞保局E化加保申報表 (單筆)\n* 勞保被保險人投保資料表 (勞保局列印)\n* 勞保個人加保完成線上列印\n* 勞保團體加保完成線上列印  \n\n### **使用方式範例:**\n```bash\ncurl -X POST \"https://localhost/ocr/identity/id_card\"  \n     -H \"accept: application/json\"\n     -H 'Authorization: Bearer {API_KEY}'   \n     -H \"Content-Type: multipart/form-data\"   \n     -F \"file=@/path/to/your/id_card.jpg\"  \n```\n#### 參數說明:\n* -X POST: 指定 HTTP 方法為 POST。  \n* \"https://localhost/ocr/identity/id_card\": 依照文件類別，選定 API 端點路徑。  \n* -H \"accept: application/json\": 指定接受的回應格式為 JSON。\n* -H \"Authorization: Bearer {API_KEY}\": 指定授權標頭，請輸入 API 金鑰進行身份驗證。\n* -H \"Content-Type: multipart/form-data\": 指定請求內容類型為 multipart/form-data。  \n* -F \"file=@/path/to/your/id_card.jpg\": 指定要上傳的影像檔案路徑。請將 /path/to/your/id_card.jpg 替換成您實際的檔案路徑。  \n\n\n### **回應代號:**\n* **200 OK:** 成功\n    ```json\n    {\n        \"status\": \"success\",\n        \"data\": {\n        \"姓名\": \"王小明\",\n        \"出生年月日\": \"民國81年10月21日\",\n        \"統一編號\": \"A123456789\"\n        }\n    }\n    ```\n* **400 Bad Request:** 檔案類型無效\n* **422 Unprocessable Entity:** 驗證錯誤\n* **500 Internal Server Error:** 伺服器內部錯誤\n    ",
+    "description": "\n\n## 此服務提供多種文件類型的光學字元辨識 (OCR) 功能。\n\n### **API 文件列表：**\n* 中華民國身分證\n* 全民健康保險卡\n* 中華民國居留證\n* 外勞護照 (越南)\n* 汽車行照\n* 柴油車排煙檢測表\n* 自主管理標章\n* 勞工職業災害保險及保護法第10條規定 (特別加保)\n* 勞保局E化加保申報表 (單筆)\n* 勞保被保險人投保資料表 (勞保局列印)\n* 勞保個人加保完成線上列印\n* 勞保團體加保完成線上列印  \n\n### **使用方式範例:**\n```bash\ncurl -X POST \"https://{SERVER_HOST}/ocr/identity/id_card\"  \n     -H \"accept: application/json\"\n     -H 'Authorization: Bearer {API_KEY}'   \n     -H \"Content-Type: multipart/form-data\"   \n     -F \"file=@/path/to/your/id_card.jpg\"  \n```\n#### 參數說明:\n* -X POST: 指定 HTTP 方法為 POST。  \n* \"https://{SERVER_HOST}/ocr/identity/id_card\": 依照文件類別，選定 API 端點路徑。請將 {SERVER_HOST} 替換為伺服器 IP 或網域名稱（例如 172.24.9.142 或 api.example.com）。  \n* -H \"accept: application/json\": 指定接受的回應格式為 JSON。\n* -H \"Authorization: Bearer {API_KEY}\": 指定授權標頭，請輸入 API 金鑰進行身份驗證。\n* -H \"Content-Type: multipart/form-data\": 指定請求內容類型為 multipart/form-data。  \n* -F \"file=@/path/to/your/id_card.jpg\": 指定要上傳的影像檔案路徑。請將 /path/to/your/id_card.jpg 替換成您實際的檔案路徑。  \n\n\n### **回應代號:**\n* **200 OK:** 成功\n    ```json\n    {\n        \"status\": \"success\",\n        \"data\": {\n        \"姓名\": \"王小明\",\n        \"出生年月日\": \"民國81年10月21日\",\n        \"統一編號\": \"A123456789\"\n        }\n    }\n    ```\n* **400 Bad Request:** 檔案類型無效\n* **422 Unprocessable Entity:** 驗證錯誤\n* **500 Internal Server Error:** 伺服器內部錯誤\n    ",
     "version": "1.0.3"
   },
   "servers": [
     {
-      "url": "http://localhost:2024",
-      "description": "Deployment Server"
+      "url": "http://localhost:8088",
+      "description": "API Server"
+    },
+    {
+      "url": "https://172.24.9.142",
+      "description": "API Server with SSL"
     },
     {
       "url": "http://10.3.156.56:8088",
@@ -307,7 +311,7 @@
                     "國籍": "VIETNAMESE",
                     "發證日期": "01/01/2020",
                     "到期日期": "01/01/2030",
-                    "機讀碼": "<機讀碼內容>"
+                    "機讀碼": "\u003C機讀碼內容\u003E"
                   }
                 }
               }
@@ -1020,7 +1024,9 @@
             "description": "Successful response",
             "content": {
               "application/json": {
-                "schema": {},
+                "schema": {
+
+                },
                 "example": {
                   "status": "success",
                   "data": "Welcome to OCR Recognition Service"
@@ -1062,7 +1068,9 @@
             "description": "Successful response",
             "content": {
               "application/json": {
-                "schema": {},
+                "schema": {
+
+                },
                 "example": {
                   "status": "success",
                   "data": "healthy"
@@ -1426,7 +1434,9 @@
         "type": "oauth2",
         "flows": {
           "password": {
-            "scopes": {},
+            "scopes": {
+
+            },
             "tokenUrl": "token"
           }
         }
