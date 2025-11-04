@@ -1,26 +1,43 @@
 #!/usr/bin/env python3
-import http.server
-import socketserver
+from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+import uvicorn
 import os
 
-PORT = 5000
-DIRECTORY = "."
+app = FastAPI(
+    title="入廠證件辨識服務 API 文件",
+    description="OCR Recognition API Documentation",
+    version="1.0.3"
+)
 
-class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, directory=DIRECTORY, **kwargs)
-    
-    def end_headers(self):
-        self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
-        self.send_header('Pragma', 'no-cache')
-        self.send_header('Expires', '0')
-        super().end_headers()
+@app.middleware("http")
+async def add_cache_control_headers(request, call_next):
+    response = await call_next(request)
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
 
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
+app.mount("/swagger-ui", StaticFiles(directory="swagger-ui"), name="swagger-ui")
 
-socketserver.TCPServer.allow_reuse_address = True
+@app.get("/")
+async def read_root():
+    return FileResponse("index.html")
 
-with socketserver.TCPServer(("0.0.0.0", PORT), MyHTTPRequestHandler) as httpd:
-    print(f"API Documentation server running at http://0.0.0.0:{PORT}/")
+@app.get("/openapi.json")
+async def get_openapi():
+    return FileResponse("openapi.json", media_type="application/json")
+
+if __name__ == "__main__":
+    print("API Documentation server starting...")
+    print("Server will be available at http://0.0.0.0:5000/")
     print("Open your browser and navigate to the webview to see the documentation")
-    httpd.serve_forever()
+    print("All Swagger UI assets are now served locally (offline mode)")
+    
+    uvicorn.run(
+        app,
+        host="0.0.0.0",
+        port=5000,
+        log_level="info"
+    )

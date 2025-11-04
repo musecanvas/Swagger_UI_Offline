@@ -30,7 +30,13 @@
 .
 ├── index.html          # API 文件主頁面
 ├── openapi.json        # OpenAPI 3.0 規格文件
-├── server.py           # Python 簡易 HTTP 伺服器
+├── server.py           # FastAPI 伺服器
+├── pyproject.toml      # Python 專案配置與依賴
+├── swagger-ui/         # Swagger UI 靜態資源 (離線使用，1.8MB)
+│   ├── swagger-ui.css
+│   ├── swagger-ui-bundle.js
+│   ├── swagger-ui-standalone-preset.js
+│   └── favicon-32x32.png
 └── README.md           # 本說明文件
 ```
 
@@ -83,9 +89,12 @@ curl -X POST "http://localhost:2024/ocr/identity/id_card" \
 ## 技術細節
 
 - **OpenAPI 版本:** 3.0.0
-- **Swagger UI 版本:** 5.10.3 (透過 CDN)
-- **伺服器:** Python HTTP Server
+- **Swagger UI 版本:** 5.10.3 (本地離線版)
+- **Web 框架:** FastAPI 0.121.0
+- **ASGI 伺服器:** Uvicorn 0.38.0
+- **Python 版本:** 3.11
 - **端口:** 5000
+- **離線使用:** ✅ 所有資源已本地化，無需網路連線
 
 ## 授權
 
